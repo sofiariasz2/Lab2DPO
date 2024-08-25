@@ -1,7 +1,10 @@
 package uniandes.dpoo.estructuras.logica;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +44,9 @@ public class SandboxMapas
      */
     public List<String> getValoresComoLista( )
     {
-        return null;
+    	List<String> valores = new ArrayList<>(mapaCadenas.values()); // Extraemos los valores del mapa
+        Collections.sort(valores); // Ordenamos los valores lexicográficamente
+        return valores;
     }
 
     /**
@@ -50,7 +55,9 @@ public class SandboxMapas
      */
     public List<String> getLlavesComoListaInvertida( )
     {
-        return null;
+    	List<String> llaves = new ArrayList<>(mapaCadenas.keySet()); // Extraemos las llaves del mapa
+        Collections.sort(llaves, Collections.reverseOrder()); // Ordenamos las llaves de mayor a menor
+        return llaves;
     }
 
     /**
@@ -61,7 +68,7 @@ public class SandboxMapas
      */
     public String getPrimera( )
     {
-        return null;
+    	return mapaCadenas.isEmpty() ? null : Collections.min(mapaCadenas.keySet());
     }
 
     /**
@@ -72,7 +79,7 @@ public class SandboxMapas
      */
     public String getUltima( )
     {
-        return null;
+    	return mapaCadenas.isEmpty() ? null : Collections.max(mapaCadenas.values());
     }
 
     /**
@@ -83,7 +90,12 @@ public class SandboxMapas
      */
     public Collection<String> getLlaves( )
     {
-        return null;
+    	List<String> llavesMayusculas = new ArrayList<>();
+        for (String llave : mapaCadenas.keySet()) {
+            llavesMayusculas.add(llave.toUpperCase()); // Convertimos cada llave a mayúsculas y la agregamos a la lista
+        }
+        return llavesMayusculas;
+        
     }
 
     /**
@@ -92,7 +104,7 @@ public class SandboxMapas
      */
     public int getCantidadCadenasDiferentes( )
     {
-        return -1;
+    	return new HashSet<>(mapaCadenas.values()).size();
     }
 
     /**
@@ -104,6 +116,8 @@ public class SandboxMapas
      */
     public void agregarCadena( String cadena )
     {
+    	String llaveInvertida = new StringBuilder(cadena).reverse().toString(); // Invertimos la cadena para obtener la llave
+        mapaCadenas.put(llaveInvertida, cadena); 
 
     }
 
@@ -113,6 +127,7 @@ public class SandboxMapas
      */
     public void eliminarCadenaConLLave( String llave )
     {
+    	mapaCadenas.remove(llave);
 
     }
 
@@ -122,6 +137,8 @@ public class SandboxMapas
      */
     public void eliminarCadenaConValor( String valor )
     {
+    	String llaveInvertida = new StringBuilder(valor).reverse().toString(); // Invertimos el valor para encontrar la llave
+        mapaCadenas.remove(llaveInvertida);
 
     }
 
@@ -133,14 +150,28 @@ public class SandboxMapas
      */
     public void reiniciarMapaCadenas( List<Object> objetos )
     {
+    	mapaCadenas.clear(); 
+        for (Object obj : objetos) {
+            String valor = obj.toString(); 
+            String llaveInvertida = new StringBuilder(valor).reverse().toString(); 
+            mapaCadenas.put(llaveInvertida, valor); 
+        }
 
     }
 
     /**
      * Modifica el mapa de cadenas reemplazando las llaves para que ahora todas estén en mayúsculas pero sigan conservando las mismas cadenas asociadas.
      */
-    public void volverMayusculas( )
+    
+    public void volverMayusculas() 
     {
+    	Map<String, String> nuevoMapa = new HashMap<>();
+        for (Map.Entry<String, String> entry : mapaCadenas.entrySet()) {
+            String nuevaLlave = entry.getKey().toUpperCase(); 
+            nuevoMapa.put(nuevaLlave, entry.getValue()); 
+        }
+        mapaCadenas = nuevoMapa;
+            
 
     }
 
@@ -151,7 +182,13 @@ public class SandboxMapas
      */
     public boolean compararValores( String[] otroArreglo )
     {
-        return false;
+    	Collection<String> valores = mapaCadenas.values(); // Obtenemos la colección de valores del mapa
+        for (String cadena : otroArreglo) {
+            if (!valores.contains(cadena)) {
+                return false; // Si algún valor no está presente en el mapa, retornamos false
+            }
+        }
+        return true;
     }
 
 }

@@ -1,6 +1,7 @@
 package uniandes.dpoo.estructuras.logica;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class SandboxListas
      */
     public List<Integer> getCopiaEnteros( )
     {
-        return null;
+    	return new ArrayList<>(listaEnteros);
     }
 
     /**
@@ -51,7 +52,7 @@ public class SandboxListas
      */
     public List<String> getCopiaCadenas( )
     {
-        return null;
+    	return new LinkedList<>(listaCadenas);
     }
 
     /**
@@ -60,7 +61,11 @@ public class SandboxListas
      */
     public int[] getEnterosComoArreglo( )
     {
-        return null;
+    	int[] arreglo = new int[listaEnteros.size()];
+        for (int i = 0; i < listaEnteros.size(); i++) {
+            arreglo[i] = listaEnteros.get(i); 
+        }
+        return arreglo;
     }
 
     /**
@@ -69,7 +74,7 @@ public class SandboxListas
      */
     public int getCantidadEnteros( )
     {
-        return -1;
+    	return listaEnteros.size();
     }
 
     /**
@@ -78,7 +83,7 @@ public class SandboxListas
      */
     public int getCantidadCadenas( )
     {
-        return -1;
+    	return listaCadenas.size();
     }
 
     /**
@@ -88,6 +93,7 @@ public class SandboxListas
      */
     public void agregarEntero( int entero )
     {
+    	listaEnteros.add(entero);
 
     }
 
@@ -98,6 +104,7 @@ public class SandboxListas
      */
     public void agregarCadena( String cadena )
     {
+    	listaCadenas.add(cadena);
 
     }
 
@@ -107,6 +114,7 @@ public class SandboxListas
      */
     public void eliminarEntero( int valor )
     {
+    	listaEnteros.removeIf(e -> e == valor);
     }
 
     /**
@@ -115,6 +123,7 @@ public class SandboxListas
      */
     public void eliminarCadena( String cadena )
     {
+    	listaCadenas.removeIf(e -> e.equals(cadena));
 
     }
 
@@ -127,6 +136,12 @@ public class SandboxListas
      */
     public void insertarEntero( int entero, int posicion )
     {
+    	if (posicion < 0) {
+            posicion = 0; 
+        } else if (posicion > listaEnteros.size()) {
+            posicion = listaEnteros.size(); 
+        }
+        listaEnteros.add(posicion, entero);
 
     }
 
@@ -137,6 +152,9 @@ public class SandboxListas
      */
     public void eliminarEnteroPorPosicion( int posicion )
     {
+    	if (posicion >= 0 && posicion < listaEnteros.size()) {
+            listaEnteros.remove(posicion); 
+        }
 
     }
 
@@ -148,6 +166,10 @@ public class SandboxListas
      */
     public void reiniciarArregloEnteros( double[] valores )
     {
+    	listaEnteros.clear(); // Limpiamos la lista actual
+        for (double valor : valores) {
+            listaEnteros.add((int) valor); 
+        }
     }
 
     /**
@@ -158,6 +180,10 @@ public class SandboxListas
      */
     public void reiniciarArregloCadenas( List<Object> objetos )
     {
+    	listaCadenas.clear(); 
+        for (Object obj : objetos) {
+            listaCadenas.add(obj.toString()); 
+        }
 
     }
 
@@ -168,6 +194,11 @@ public class SandboxListas
      */
     public void volverPositivos( )
     {
+    	for (int i = 0; i < listaEnteros.size(); i++) {
+            if (listaEnteros.get(i) < 0) {
+                listaEnteros.set(i, -listaEnteros.get(i)); 
+            }
+        }
     }
 
     /**
@@ -175,6 +206,7 @@ public class SandboxListas
      */
     public void organizarEnteros( )
     {
+    	listaEnteros.sort(Collections.reverseOrder()); 
 
     }
 
@@ -183,6 +215,7 @@ public class SandboxListas
      */
     public void organizarCadenas( )
     {
+    	Collections.sort(listaCadenas);
 
     }
 
@@ -193,7 +226,13 @@ public class SandboxListas
      */
     public int contarApariciones( int valor )
     {
-        return -1;
+    	int count = 0;
+        for (int e : listaEnteros) {
+            if (e == valor) {
+                count++; 
+            }
+        }
+        return count;
     }
 
     /**
@@ -205,7 +244,13 @@ public class SandboxListas
      */
     public int contarApariciones( String cadena )
     {
-        return -1;
+    	int count = 0;
+        for (String str : listaCadenas) {
+            if (str.equalsIgnoreCase(cadena)) {
+                count++; 
+            }
+        }
+        return count;
     }
 
     /**
@@ -214,7 +259,17 @@ public class SandboxListas
      */
     public int contarEnterosRepetidos( )
     {
-        return -1;
+    	int count = 0;
+        List<Integer> vistos = new ArrayList<>();
+        for (int e : listaEnteros) {
+            if (!vistos.contains(e)) {
+                vistos.add(e);
+                if (contarApariciones(e) > 1) {
+                    count++; 
+                }
+            }
+        }
+        return count;
     }
 
     /**
@@ -224,7 +279,15 @@ public class SandboxListas
      */
     public boolean compararArregloEnteros( int[] otroArreglo )
     {
-        return false;
+    	if (listaEnteros.size() != otroArreglo.length) {
+            return false; 
+        }
+        for (int i = 0; i < listaEnteros.size(); i++) {
+            if (!listaEnteros.get(i).equals(otroArreglo[i])) {
+                return false; 
+            }
+        }
+        return true;
     }
 
     /**
@@ -239,6 +302,11 @@ public class SandboxListas
      */
     public void generarEnteros( int cantidad, int minimo, int maximo )
     {
+        listaEnteros.clear(); 
+        for (int i = 0; i < cantidad; i++) {
+            int valor = minimo + (int) (Math.random() * (maximo - minimo + 1)); 
+            listaEnteros.add(valor); 
+        }
 
     }
 

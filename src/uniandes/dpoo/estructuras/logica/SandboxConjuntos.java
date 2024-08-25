@@ -1,5 +1,6 @@
 package uniandes.dpoo.estructuras.logica;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.NavigableSet;
@@ -39,7 +40,7 @@ public class SandboxConjuntos
      */
     public List<String> getCadenasComoLista( )
     {
-        return null;
+    	return new ArrayList<>(arbolCadenas); // Convierto el NavigableSet a una lista
     }
 
     /**
@@ -48,7 +49,7 @@ public class SandboxConjuntos
      */
     public List<String> getCadenasComoListaInvertida( )
     {
-        return null;
+    	return new ArrayList<>(arbolCadenas); // Convierto el NavigableSet a una lista
     }
 
     /**
@@ -59,7 +60,7 @@ public class SandboxConjuntos
      */
     public String getPrimera( )
     {
-        return null;
+    	return arbolCadenas.isEmpty() ? null : arbolCadenas.first(); // Si el conjunto está vacío, retorna null, si no, retorna el primer elemento
     }
 
     /**
@@ -70,7 +71,7 @@ public class SandboxConjuntos
      */
     public String getUltima( )
     {
-        return null;
+    	return arbolCadenas.isEmpty() ? null : arbolCadenas.last(); // Si el conjunto está vacío, retorna null, si no, retorna el último elemento
     }
 
     /**
@@ -80,7 +81,7 @@ public class SandboxConjuntos
      */
     public Collection<String> getSiguientes( String cadena )
     {
-        return null;
+    	return arbolCadenas.tailSet(cadena, true); // Uso tailSet para obtener todos los elementos mayores o iguales a cadena
     }
 
     /**
@@ -89,7 +90,7 @@ public class SandboxConjuntos
      */
     public int getCantidadCadenas( )
     {
-        return -1;
+    	return arbolCadenas.size(); // Retorno el tamaño del conjunto
     }
 
     /**
@@ -101,6 +102,8 @@ public class SandboxConjuntos
      */
     public void agregarCadena( String cadena )
     {
+    	arbolCadenas.add(cadena); // Agrego la cadena al conjunto
+    
 
     }
 
@@ -110,6 +113,7 @@ public class SandboxConjuntos
      */
     public void eliminarCadena( String cadena )
     {
+    	arbolCadenas.remove(cadena); // Elimino la cadena del conjunto
 
     }
 
@@ -119,6 +123,7 @@ public class SandboxConjuntos
      */
     public void eliminarCadenaSinMayusculasOMinusculas( String cadena )
     {
+    	arbolCadenas.removeIf(str -> str.equalsIgnoreCase(cadena)); // Elimino cualquier cadena que coincida sin importar mayúsculas/minúsculas
 
     }
 
@@ -127,7 +132,9 @@ public class SandboxConjuntos
      */
     public void eliminarPrimera( )
     {
-
+    	if (!arbolCadenas.isEmpty()) {
+            arbolCadenas.pollFirst(); // Elimino el primer elemento (lexicográficamente menor) del conjunto
+        }
     }
 
     /**
@@ -138,6 +145,10 @@ public class SandboxConjuntos
      */
     public void reiniciarConjuntoCadenas( List<Object> objetos )
     {
+    	arbolCadenas.clear(); // Limpio el conjunto actual
+        for (Object obj : objetos) {
+            arbolCadenas.add(obj.toString()); // Convierto cada objeto a String y lo agregamos al conjunto
+        }
 
     }
 
@@ -148,6 +159,11 @@ public class SandboxConjuntos
      */
     public void volverMayusculas( )
     {
+    	NavigableSet<String> nuevoConjunto = new TreeSet<>();
+        for (String cadena : arbolCadenas) {
+            nuevoConjunto.add(cadena.toUpperCase()); // Convierti cada cadena a mayúsculas y la agrego a un nuevo conjunto
+        }
+        arbolCadenas = nuevoConjunto; // Reemplazo el conjunto original con el nuevo conjunto
     }
 
     /**
@@ -155,7 +171,7 @@ public class SandboxConjuntos
      */
     public TreeSet<String> invertirCadenas( )
     {
-        return null;
+    	return new TreeSet<>(arbolCadenas.descendingSet()); // Creo un nuevo TreeSet a partir del conjunto en orden descendente
     }
 
     /**
@@ -165,7 +181,12 @@ public class SandboxConjuntos
      */
     public boolean compararElementos( String[] otroArreglo )
     {
-        return false;
+    	for (String cadena : otroArreglo) {
+            if (!arbolCadenas.contains(cadena)) {
+                return false; // Si algún elemento no está en el conjunto, retorna false
+            }
+        }
+        return true; // Si todos los elementos están en el conjunto, retorna true
     }
 
 }
